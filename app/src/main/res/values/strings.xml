@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Ceep</string>
+    <string name="layout_linear">Layout linear</string>
+    <string name="layout_grid">Layout grid</string>
+</resources>
