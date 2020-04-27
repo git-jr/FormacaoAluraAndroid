@@ -1,4 +1,4 @@
-package br.com.alura.ceep;
+package br.com.alura.ceep.enums;
 
 public enum MenuEnum {
     LIENAR, GRID

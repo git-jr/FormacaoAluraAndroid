@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import br.com.alura.ceep.MenuEnum;
+import br.com.alura.ceep.enums.MenuEnum;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
@@ -34,8 +33,9 @@ import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVAL
 
 public class ListaNotasActivity extends AppCompatActivity {
 
-    public static final String NOME_SHARED_PREFERENCE = "PREFES_USU";
-    public static final String SHARED_PREFERENCE_MENU = "SH_MENU";
+
+    private static final String NOME_SHARED_PREFERENCE = "PREFE_USU";
+    private static final String SHARED_PREFERENCE_MENU = "SH_MENU";
     private MenuEnum estiloMenu;
     private Menu menuAtual;
 
