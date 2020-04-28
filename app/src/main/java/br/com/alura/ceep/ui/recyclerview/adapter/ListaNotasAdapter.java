@@ -1,6 +1,7 @@
 package br.com.alura.ceep.ui.recyclerview.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,12 +69,14 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
         private final TextView titulo;
         private final TextView descricao;
+        private final CardView cardView;
         private Nota nota;
 
         public NotaViewHolder(View itemView) {
             super(itemView);
             titulo = itemView.findViewById(R.id.item_nota_titulo);
             descricao = itemView.findViewById(R.id.item_nota_descricao);
+            cardView = itemView.findViewById(R.id.cardView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -90,6 +93,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         private void preencheCampo(Nota nota) {
             titulo.setText(nota.getTitulo());
             descricao.setText(nota.getDescricao());
+            cardView.setCardBackgroundColor(nota.getCor().getCor());
         }
     }
 

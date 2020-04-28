@@ -1,15 +1,22 @@
 package br.com.alura.ceep.model;
 
+import android.graphics.Color;
+
 import java.io.Serializable;
 
-public class Nota implements Serializable{
+public class Nota implements Serializable {
 
-    private final String titulo;
-    private final String descricao;
+    private String titulo;
+    private String descricao;
+    private Cor cor;
 
     public Nota(String titulo, String descricao) {
         this.titulo = titulo;
         this.descricao = descricao;
+    }
+
+    public Nota() {
+        cor = new Cor();
     }
 
     public String getTitulo() {
@@ -20,4 +27,19 @@ public class Nota implements Serializable{
         return descricao;
     }
 
+    public void setCor(Cor cor) {
+        this.cor = cor;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Cor getCor() {
+        return cor;
+    }
 }
