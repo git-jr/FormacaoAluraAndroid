@@ -30,11 +30,12 @@ import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_ALTERA_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_INSERE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
+import static br.com.alura.ceep.ui.activity.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
 
 public class ListaNotasActivity extends AppCompatActivity {
 
 
-    private static final String NOME_SHARED_PREFERENCE = "PREFE_USU";
+
     private static final String SHARED_PREFERENCE_MENU = "SH_MENU";
     private MenuEnum estiloMenu;
     private Menu menuAtual;
