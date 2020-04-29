@@ -4,5 +4,5 @@ import br.com.alura.ceep.model.Nota;
 
 public interface OnItemClickListener {
 
-    void onItemClick(Nota nota, int posicao);
+    void onItemClick(Nota nota);
 }
