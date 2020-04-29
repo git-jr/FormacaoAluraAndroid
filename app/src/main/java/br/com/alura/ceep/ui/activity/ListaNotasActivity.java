@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.alura.ceep.ui.FeedbackActivity;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.database.NotaDataBase;
 import br.com.alura.ceep.database.dao.NotaDAO;
@@ -27,10 +28,8 @@ import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCallback;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_ALTERA_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_INSERE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 import static br.com.alura.ceep.ui.activity.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
 
 public class ListaNotasActivity extends AppCompatActivity {
@@ -73,7 +72,11 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        selecionaEstiloMenu();
+        if (item.getItemId() == R.id.feedback) {
+            startActivity(new Intent(ListaNotasActivity.this, FeedbackActivity.class));
+        } else {
+            selecionaEstiloMenu();
+        }
         return super.onOptionsItemSelected(item);
     }
 
