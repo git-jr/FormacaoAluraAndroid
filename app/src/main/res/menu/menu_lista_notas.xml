@@ -6,7 +6,8 @@
         android:id="@+id/layout_linear"
         android:icon="@drawable/ic_layout_linear"
         android:title="@string/layout_linear"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:visible="false"/>
 
     <item
         android:id="@+id/layout_grid"

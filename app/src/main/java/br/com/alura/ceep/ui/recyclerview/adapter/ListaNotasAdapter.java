@@ -53,7 +53,6 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return notas.size();
     }
 
-
     public void altera(Nota nota) {
         notas.set(nota.getPosicao().intValue(), nota);
         notifyItemChanged(nota.getPosicao().intValue(), nota);

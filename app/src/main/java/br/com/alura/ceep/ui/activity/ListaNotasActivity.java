@@ -41,6 +41,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Notas";
     private ListaNotasAdapter adapter;
+    RecyclerView listaNotasRecyclerView;
 
     private NotaDAO dao;
 
@@ -59,6 +60,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         List<Nota> todasNotas = pegaTodasNotas();
         configuraRecyclerView(todasNotas);
+        configuraItemTouchHelper();
         configuraBotaoInsereNota();
     }
 
@@ -94,7 +96,8 @@ public class ListaNotasActivity extends AppCompatActivity {
             menuLinear.setVisible(false);
             estiloMenu = MenuEnum.LIENAR;
         }
-        configuraRecyclerView(pegaTodasNotas());
+
+        definirLayoutAdapter();
 
     }
 
@@ -107,7 +110,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void obtemEstiloMenu() {
         SharedPreferences sharedPreferences = getSharedPreferences(NOME_SHARED_PREFERENCE, Context.MODE_PRIVATE);
-        String estiloMenuSalvo = sharedPreferences.getString(SHARED_PREFERENCE_MENU, MenuEnum.LIENAR.toString());
+        String estiloMenuSalvo = sharedPreferences.getString(SHARED_PREFERENCE_MENU, MenuEnum.GRID.toString());
         estiloMenu = MenuEnum.valueOf(estiloMenuSalvo);
     }
 
@@ -194,19 +197,14 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void configuraRecyclerView(List<Nota> todasNotas) {
-        RecyclerView listaNotas = findViewById(R.id.lista_notas_recyclerview);
-        configuraAdapter(todasNotas, listaNotas);
-    }
-
-    private void configuraItemTouchHelper(RecyclerView listaNotas) {
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NotaItemTouchHelperCallback(adapter, dao));
-        itemTouchHelper.attachToRecyclerView(listaNotas);
+        listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
+        configuraAdapter(todasNotas, listaNotasRecyclerView);
     }
 
     private void configuraAdapter(List<Nota> todasNotas, RecyclerView listaNotas) {
         adapter = new ListaNotasAdapter(this, todasNotas);
 
-        definirLayoutAdapter(listaNotas);
+        definirLayoutAdapter();
 
         listaNotas.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -215,15 +213,18 @@ public class ListaNotasActivity extends AppCompatActivity {
                 vaiParaFormularioNotaActivityAltera(nota);
             }
         });
-
-        configuraItemTouchHelper(listaNotas);
     }
 
-    private void definirLayoutAdapter(RecyclerView listaNotas) {
+    private void configuraItemTouchHelper() {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NotaItemTouchHelperCallback(adapter, dao));
+        itemTouchHelper.attachToRecyclerView(listaNotasRecyclerView);
+    }
+
+    private void definirLayoutAdapter() {
         if (estiloMenu.equals(MenuEnum.LIENAR)) {
-            listaNotas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         } else {
-            listaNotas.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            listaNotasRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         }
     }
 

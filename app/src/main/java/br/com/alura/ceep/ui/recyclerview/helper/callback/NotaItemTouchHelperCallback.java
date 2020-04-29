@@ -1,7 +1,11 @@
 package br.com.alura.ceep.ui.recyclerview.helper.callback;
 
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.alura.ceep.database.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
@@ -34,22 +38,13 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void trocaNotas(int posicaoInicial, int posicaoFinal) {
-
         adapter.troca(posicaoInicial, posicaoFinal);
+        trocarPosicaoNotasNoBanco(posicaoInicial, posicaoFinal);
     }
 
-    private void trocaNotas(long posicaoInicial, long posicaoFinal) {
-        Nota notaInicial = dao.buscaPorPosicao(posicaoInicial);
-        Nota notaFinal = dao.buscaPorPosicao(posicaoFinal);
-
-        notaInicial.setId(notaFinal.getId());
-        notaInicial.setPosicao(posicaoFinal);
-
-        notaFinal.setId(dao.buscaPorPosicao(posicaoInicial).getId());
-        notaFinal.setPosicao(posicaoInicial);
-
-        dao.insere(notaInicial);
-        dao.insere(notaFinal);
+    private void trocarPosicaoNotasNoBanco(long posicaoInicial, long posicaoFinal) {
+        TrocaNotasPosicao trocaNotasPosicao = new TrocaNotasPosicao();
+        trocaNotasPosicao.execute(posicaoInicial, posicaoFinal);
     }
 
     @Override
@@ -62,5 +57,28 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
         Nota notaParaRemover = dao.buscaPorPosicao((long) posicao);
         dao.remove(notaParaRemover);
         adapter.remove(posicao);
+    }
+
+    private class TrocaNotasPosicao extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... posicoes) {
+            troca(posicoes[0], posicoes[1]);
+            return null;
+        }
+
+        private void troca(Long posicaoInicial, Long posicaoFinal) {
+            Nota notaInicial = dao.buscaPorPosicao(posicaoInicial);
+            Nota notaFinal = dao.buscaPorPosicao(posicaoFinal);
+
+            notaInicial.setId(notaFinal.getId());
+            notaInicial.setPosicao(posicaoFinal);
+
+            notaFinal.setId(dao.buscaPorPosicao(posicaoInicial).getId());
+            notaFinal.setPosicao(posicaoInicial);
+
+            dao.insere(notaInicial);
+            dao.insere(notaFinal);
+        }
     }
 }
