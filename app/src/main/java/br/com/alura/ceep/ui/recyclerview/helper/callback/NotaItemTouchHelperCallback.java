@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import br.com.alura.ceep.database.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
@@ -38,14 +35,9 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void trocaNotas(int posicaoInicial, int posicaoFinal) {
-        adapter.troca(posicaoInicial, posicaoFinal);
-        trocarPosicaoNotasNoBanco(posicaoInicial, posicaoFinal);
+        new TrocaNotasPosicaoNoBanco().execute((long) posicaoInicial, (long) posicaoFinal);
     }
 
-    private void trocarPosicaoNotasNoBanco(long posicaoInicial, long posicaoFinal) {
-        TrocaNotasPosicao trocaNotasPosicao = new TrocaNotasPosicao();
-        trocaNotasPosicao.execute(posicaoInicial, posicaoFinal);
-    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
@@ -54,20 +46,18 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void removeNota(int posicao) {
-        Nota notaParaRemover = dao.buscaPorPosicao((long) posicao);
-        dao.remove(notaParaRemover);
+        dao.remove(Long.valueOf(posicao));
         adapter.remove(posicao);
     }
 
-    private class TrocaNotasPosicao extends AsyncTask<Long, Void, Void> {
+    private class TrocaNotasPosicaoNoBanco extends AsyncTask<Long, Void, Long[]> {
 
         @Override
-        protected Void doInBackground(Long... posicoes) {
-            troca(posicoes[0], posicoes[1]);
-            return null;
-        }
+        protected Long[] doInBackground(Long... posicoes) {
+            // troca(posicoes[0], posicoes[1]);
+            Long posicaoInicial = posicoes[0];
+            Long posicaoFinal = posicoes[1];
 
-        private void troca(Long posicaoInicial, Long posicaoFinal) {
             Nota notaInicial = dao.buscaPorPosicao(posicaoInicial);
             Nota notaFinal = dao.buscaPorPosicao(posicaoFinal);
 
@@ -79,6 +69,14 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
             dao.insere(notaInicial);
             dao.insere(notaFinal);
+
+            return posicoes;
+        }
+
+        @Override
+        protected void onPostExecute(Long... posicoes) {
+            super.onPostExecute(posicoes);
+            adapter.troca(posicoes[0], posicoes[1]);
         }
     }
 }

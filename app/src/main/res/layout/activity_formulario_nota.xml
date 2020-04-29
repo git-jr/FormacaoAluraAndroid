@@ -43,5 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/formulario_nota_descricao"
-        tools:listitem="@layout/item_cor" />
+        tools:listitem="@layout/item_cor"
+        android:orientation="horizontal"/>
 </android.support.constraint.ConstraintLayout>

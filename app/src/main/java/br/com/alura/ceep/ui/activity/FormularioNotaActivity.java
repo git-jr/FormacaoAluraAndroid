@@ -33,7 +33,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     public static final String NOTA_EM_MEMORIA = "NOTA_MEMORIA";
     public static final String TITULO_APPBAR = "TITULO_APPBAR";
     private ConstraintLayout formulario_nota_container;
-    private Nota notaRecebida;
+    private Nota notaPadrao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,11 @@ public class FormularioNotaActivity extends AppCompatActivity {
             Intent dadosRecebidos = getIntent();
             if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
                 setTitle(TITULO_APPBAR_ALTERA);
-                notaRecebida = (Nota) dadosRecebidos
+                notaPadrao = (Nota) dadosRecebidos
                         .getSerializableExtra(CHAVE_NOTA);
-                preencheCampos(notaRecebida);
+                preencheCampos(notaPadrao);
             } else {
-                notaRecebida = new Nota();
+                notaPadrao = new Nota();
             }
         }
         configuraTrocaDeTrocaDeCores();
@@ -63,7 +63,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(NOTA_EM_MEMORIA, notaRecebida);
+        outState.putSerializable(NOTA_EM_MEMORIA, notaPadrao);
         outState.putString("TITULO_APPBAR", getSupportActionBar().getTitle().toString());
     }
 
@@ -74,13 +74,13 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private void salvaDadosEstadoAtualDaActivity(Bundle savedInstanceState) {
         setTitle(savedInstanceState.getString(TITULO_APPBAR));
         Nota nota = (Nota) savedInstanceState.getSerializable(NOTA_EM_MEMORIA);
-        notaRecebida = nota;
+        notaPadrao = nota;
         inicializaCampos();
-        preencheCampos(notaRecebida);
+        preencheCampos(notaPadrao);
     }
 
     private void configuraTrocaDeTrocaDeCores() {
-        trocaCorDoFundoFormulario(notaRecebida.getCor());
+        trocaCorDoFundoFormulario(notaPadrao.getCor());
         configuraRecyclerView(listaCores());
     }
 
@@ -95,8 +95,8 @@ public class FormularioNotaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Cor cor, int position) {
                 trocaCorDoFundoFormulario(cor);
-                notaRecebida.setCor(cor);
-                notaRecebida.setCorId(cor.getIdCor());
+                notaPadrao.setCor(cor);
+                notaPadrao.setCorId(cor.getIdCor());
             }
         });
         recyclerView.setAdapter(adapterCor);
@@ -131,8 +131,8 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (ehMenuSalvaNota(item)) {
-            Nota notaCriada = criaNota();
-            retornaNota(notaCriada);
+            notaPadrao = criaNota();
+            retornaNota(notaPadrao);
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -146,9 +146,9 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
     @NonNull
     private Nota criaNota() {
-        notaRecebida.setTitulo(titulo.getText().toString());
-        notaRecebida.setDescricao(descricao.getText().toString());
-        return notaRecebida;
+        notaPadrao.setTitulo(titulo.getText().toString());
+        notaPadrao.setDescricao(descricao.getText().toString());
+        return notaPadrao;
     }
 
     private boolean ehMenuSalvaNota(MenuItem item) {

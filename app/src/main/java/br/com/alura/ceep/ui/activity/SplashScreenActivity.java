@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +33,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     private int verificaSeAppJaFoiAberto() {
         if (!appJaFoiAberto()) {
             confirmarAberturaDoApp();
-            carregaListaCoresPadroa();
+            salvaListaCoresPadraoNoBanco();
             return 2000;
         }
         return 500;
     }
 
-    private void carregaListaCoresPadroa() {
+    private void salvaListaCoresPadraoNoBanco() {
 
         List<Cor> cores = new ArrayList<>();
         cores.add(new Cor("AZUL", "#408EC9"));

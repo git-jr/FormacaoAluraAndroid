@@ -59,23 +59,35 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     }
 
     public void remove(int posicao) {
-        if (notas.isEmpty()) return;
         notas.remove(posicao);
+        removeUmaPosicaoDeCadaNota(posicao);
+        //notifyDataSetChanged();
         notifyItemRemoved(posicao);
 
+    }
+
+    private void removeUmaPosicaoDeCadaNota(int posicao) {
         for (Nota nota : notas) {
             if (nota.getPosicao() > posicao) {
                 nota.setPosicao(nota.getPosicao() - 1);
                 databaseDao.getRoomNotaDAO().insere(nota);
             }
         }
-
     }
 
-    public void troca(int posicaoInicial, int posicaoFinal) {
+    private void adicionaUmaPosicaoDeCadaNota() {
+        Long posicao = Long.valueOf(0);
+        for (Nota nota : notas) {
+            nota.setPosicao(nota.getPosicao() + 1);
+            databaseDao.getRoomNotaDAO().insere(nota);
+            posicao++;
+        }
+    }
 
-        Collections.swap(notas, posicaoInicial, posicaoFinal);
-        notifyItemMoved(posicaoInicial, posicaoFinal);
+    public void troca(Long posicaoInicial, Long posicaoFinal) {
+        notas.clear();
+        notas.addAll(databaseDao.getRoomNotaDAO().todos());
+        notifyItemMoved(posicaoInicial.intValue(), posicaoFinal.intValue());
     }
 
     class NotaViewHolder extends RecyclerView.ViewHolder {
@@ -115,11 +127,13 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     public void adiciona(Nota nota) {
         if (verificaSeNotaJapossuiPosicaoSalvaNoBanco(nota)) {
-            nota.setPosicao((long) notas.size());
+            adicionaUmaPosicaoDeCadaNota();
+            nota.setPosicao((long) 0);
             databaseDao.getRoomNotaDAO().insere(nota);
+            notas.add(0, nota);
         }
-        notas.add(nota);
-        notifyItemInserted(nota.getPosicao().intValue());
+        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     private boolean verificaSeNotaJapossuiPosicaoSalvaNoBanco(Nota nota) {

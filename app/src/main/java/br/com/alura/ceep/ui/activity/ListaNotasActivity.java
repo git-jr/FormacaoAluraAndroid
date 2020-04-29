@@ -203,7 +203,6 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void configuraAdapter(List<Nota> todasNotas, RecyclerView listaNotas) {
         adapter = new ListaNotasAdapter(this, todasNotas);
-
         definirLayoutAdapter();
 
         listaNotas.setAdapter(adapter);
@@ -222,9 +221,11 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void definirLayoutAdapter() {
         if (estiloMenu.equals(MenuEnum.LIENAR)) {
-            listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            LinearLayoutManager layoutLinear = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            listaNotasRecyclerView.setLayoutManager(layoutLinear);
         } else {
-            listaNotasRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            StaggeredGridLayoutManager layoutGrid = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            listaNotasRecyclerView.setLayoutManager(layoutGrid);
         }
     }
 

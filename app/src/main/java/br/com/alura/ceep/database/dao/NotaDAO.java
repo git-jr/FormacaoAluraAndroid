@@ -20,35 +20,10 @@ public interface NotaDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insere(Nota nota);
 
-    @Delete
-    void remove(Nota nota);
+    @Query("DELETE FROM Nota where nota.posicao = :posicaoNota")
+    void remove(Long posicaoNota);
 
     @Query("SELECT * FROM nota WHERE nota.posicao = :posicaoNota ")
     Nota buscaPorPosicao(Long posicaoNota);
 
-/*    private final static ArrayList<Nota> notas = new ArrayList<>();
-
-    public List<Nota> todos() {
-        return (List<Nota>) notas.clone();
-    }
-
-    public void insere(Nota... notas) {
-        NotaDAO.notas.addAll(Arrays.asList(notas));
-    }
-
-    public void altera(int posicao, Nota nota) {
-        notas.set(posicao, nota);
-    }
-
-    public void remove(int posicao) {
-        notas.remove(posicao);
-    }
-
-    public void troca(int posicaoInicio, int posicaoFim) {
-        Collections.swap(notas, posicaoInicio, posicaoFim);
-    }
-
-    public void removeTodos() {
-        notas.clear();
-    }*/
 }
