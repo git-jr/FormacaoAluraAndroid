@@ -22,4 +22,6 @@ public interface CorDAO {
     @Query("SELECT * FROM cor")
     List<Cor> todos();
 
+    @Query("SELECT * FROM cor where cor.nome = :nomeCor")
+    Cor getCorDeafult(String nomeCor);
 }

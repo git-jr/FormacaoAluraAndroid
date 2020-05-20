@@ -17,23 +17,22 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import br.com.alura.ceep.ui.FeedbackActivity;
+import br.com.alura.ceep.database.dao.CorDAO;
+import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.database.NotaDataBase;
 import br.com.alura.ceep.database.dao.NotaDAO;
 import br.com.alura.ceep.enums.MenuEnum;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
-import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCallback;
 
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_ALTERA_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_INSERE_NOTA;
-import static br.com.alura.ceep.ui.activity.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
+import static br.com.alura.ceep.constantes.NotaActivityConstantes.CHAVE_NOTA;
+import static br.com.alura.ceep.constantes.NotaActivityConstantes.CODIGO_REQUISICAO_ALTERA_NOTA;
+import static br.com.alura.ceep.constantes.NotaActivityConstantes.CODIGO_REQUISICAO_INSERE_NOTA;
+import static br.com.alura.ceep.constantes.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
 
 public class ListaNotasActivity extends AppCompatActivity {
-
 
     private static final String SHARED_PREFERENCE_MENU = "SH_MENU";
     private MenuEnum estiloMenu;
@@ -56,12 +55,28 @@ public class ListaNotasActivity extends AppCompatActivity {
         // Inicializando DAO
         dao = NotaDataBase.getInstance(this).getRoomNotaDAO();
 
+        //insereNotasDeTeste();
+
         setTitle(TITULO_APPBAR);
 
         List<Nota> todasNotas = pegaTodasNotas();
         configuraRecyclerView(todasNotas);
         configuraItemTouchHelper();
         configuraBotaoInsereNota();
+    }
+
+    private void insereNotasDeTeste() {
+        CorDAO daoCor = NotaDataBase.getInstance(this).getRoomCorDAO();
+        List<Cor> todasCores = daoCor.todos();
+        for (int i = 0; i < 5; i++) {
+            Nota notaDeTeste = new Nota();
+            notaDeTeste.setPosicao((long) i);
+            notaDeTeste.setTitulo(String.format("Titulo %s", i));
+            notaDeTeste.setDescricao(String.format("Descricao %s", i));
+            notaDeTeste.setCor(todasCores.get(i));
+            notaDeTeste.setCorId(todasCores.get(i).getIdCor());
+            dao.insere(notaDeTeste);
+        }
     }
 
     @Override
@@ -206,10 +221,10 @@ public class ListaNotasActivity extends AppCompatActivity {
         definirLayoutAdapter();
 
         listaNotas.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new ListaNotasAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Nota nota) {
-                vaiParaFormularioNotaActivityAltera(nota);
+            public void onItemClick(Long idNota) {
+                vaiParaFormularioNotaActivityAltera(idNota);
             }
         });
     }
@@ -229,10 +244,10 @@ public class ListaNotasActivity extends AppCompatActivity {
         }
     }
 
-    private void vaiParaFormularioNotaActivityAltera(Nota nota) {
+    private void vaiParaFormularioNotaActivityAltera(Long idNota) {
         Intent abreFormularioComNota = new Intent(ListaNotasActivity.this,
                 FormularioNotaActivity.class);
-        abreFormularioComNota.putExtra(CHAVE_NOTA, nota);
+        abreFormularioComNota.putExtra(CHAVE_NOTA, idNota);
         startActivityForResult(abreFormularioComNota, CODIGO_REQUISICAO_ALTERA_NOTA);
     }
 

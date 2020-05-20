@@ -21,7 +21,6 @@ public class Nota implements Serializable {
     private Long corId;
     @Ignore
     private Cor cor;
-
     private Long posicao = (long) -1;
 
     public Long getPosicao() {

@@ -16,14 +16,14 @@ import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.database.NotaDataBase;
+import br.com.alura.ceep.database.dao.CorDAO;
 import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
+import static br.com.alura.ceep.constantes.NotaActivityConstantes.CHAVE_NOTA;
 
 public class FormularioNotaActivity extends AppCompatActivity {
-
 
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
     public static final String TITULO_APPBAR_ALTERA = "Altera nota";
@@ -34,12 +34,14 @@ public class FormularioNotaActivity extends AppCompatActivity {
     public static final String TITULO_APPBAR = "TITULO_APPBAR";
     private ConstraintLayout formulario_nota_container;
     private Nota notaPadrao;
+    private CorDAO roomCorDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nota);
 
+        roomCorDAO = NotaDataBase.getInstance(this).getRoomCorDAO();
 
         if (savedInstanceState != null) {
             recarregaDadosInstanciaAnteriror(savedInstanceState);
@@ -49,15 +51,19 @@ public class FormularioNotaActivity extends AppCompatActivity {
             Intent dadosRecebidos = getIntent();
             if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
                 setTitle(TITULO_APPBAR_ALTERA);
-                notaPadrao = (Nota) dadosRecebidos
-                        .getSerializableExtra(CHAVE_NOTA);
+                long idNota = dadosRecebidos.getLongExtra(CHAVE_NOTA, -1);
+                notaPadrao = NotaDataBase.getInstance(this).getRoomNotaDAO().buscaPorId(idNota);
+                notaPadrao.setCor(roomCorDAO.buscaCorPorID(notaPadrao.getCorId()));
+
                 preencheCampos(notaPadrao);
             } else {
                 notaPadrao = new Nota();
+                Cor corDefault = roomCorDAO.getCorDeafult("BRANCO");
+                notaPadrao.setCor(corDefault);
+                notaPadrao.setCorId(corDefault.getIdCor());
             }
         }
         configuraTrocaDeTrocaDeCores();
-
     }
 
     @Override
@@ -108,7 +114,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     }
 
     private List<Cor> listaCores() {
-        return NotaDataBase.getInstance(this).getRoomCorDAO().todos();
+        return roomCorDAO.todos();
     }
 
     private void preencheCampos(Nota notaRecebida) {

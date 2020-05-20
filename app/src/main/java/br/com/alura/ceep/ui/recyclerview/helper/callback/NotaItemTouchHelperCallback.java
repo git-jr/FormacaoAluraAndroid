@@ -38,7 +38,6 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
         new TrocaNotasPosicaoNoBanco().execute((long) posicaoInicial, (long) posicaoFinal);
     }
 
-
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int posicaoDaNotaDeslizada = viewHolder.getAdapterPosition();
@@ -54,17 +53,13 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
         @Override
         protected Long[] doInBackground(Long... posicoes) {
-            // troca(posicoes[0], posicoes[1]);
             Long posicaoInicial = posicoes[0];
             Long posicaoFinal = posicoes[1];
 
             Nota notaInicial = dao.buscaPorPosicao(posicaoInicial);
             Nota notaFinal = dao.buscaPorPosicao(posicaoFinal);
 
-            notaInicial.setId(notaFinal.getId());
             notaInicial.setPosicao(posicaoFinal);
-
-            notaFinal.setId(dao.buscaPorPosicao(posicaoInicial).getId());
             notaFinal.setPosicao(posicaoInicial);
 
             dao.insere(notaInicial);
