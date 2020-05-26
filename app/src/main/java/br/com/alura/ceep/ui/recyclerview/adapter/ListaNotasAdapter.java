@@ -7,15 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.Collections;
 import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.database.NotaDataBase;
 import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
-import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
 
@@ -61,9 +58,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     public void remove(int posicao) {
         notas.remove(posicao);
         removeUmaPosicaoDeCadaNota(posicao);
-        //notifyDataSetChanged();
         notifyItemRemoved(posicao);
-
     }
 
     private void removeUmaPosicaoDeCadaNota(int posicao) {
@@ -76,11 +71,9 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     }
 
     private void adicionaUmaPosicaoDeCadaNota() {
-        Long posicao = Long.valueOf(0);
         for (Nota nota : notas) {
             nota.setPosicao(nota.getPosicao() + 1);
             databaseDao.getRoomNotaDAO().insere(nota);
-            posicao++;
         }
     }
 
@@ -105,7 +98,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick(nota);
+                    onItemClickListener.onItemClick(nota.getId());
                 }
             });
         }
@@ -140,4 +133,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return nota.getPosicao() == -1;
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Long idNota);
+    }
 }

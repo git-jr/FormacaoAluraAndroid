@@ -26,4 +26,9 @@ public interface NotaDAO {
     @Query("SELECT * FROM nota WHERE nota.posicao = :posicaoNota ")
     Nota buscaPorPosicao(Long posicaoNota);
 
+    @Query("SELECT * FROM nota WHERE nota.id = :notaId ")
+    Nota buscaPorId(Long notaId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insere(List<Nota> notas);
 }

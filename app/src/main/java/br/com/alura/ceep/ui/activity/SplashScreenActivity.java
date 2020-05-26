@@ -14,7 +14,7 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.database.NotaDataBase;
 import br.com.alura.ceep.model.Cor;
 
-import static br.com.alura.ceep.ui.activity.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
+import static br.com.alura.ceep.constantes.SharedPreferencesConstantes.NOME_SHARED_PREFERENCE;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -23,11 +23,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spash_screen);
+        setContentView(R.layout.activity_splash_screen);
 
         int tempoEmTela = verificaSeAppJaFoiAberto();
         vaiParaActivityPrincipal(tempoEmTela);
-
     }
 
     private int verificaSeAppJaFoiAberto() {
